@@ -1,28 +1,27 @@
 package Crypt::XkcdPassword;
 
-use 5.010;
+use 5.010001;
 use Object::AUTHORITY;
 use utf8;
 
 BEGIN {
 	$Crypt::XkcdPassword::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::VERSION   = '0.001';
+	$Crypt::XkcdPassword::VERSION   = '0.003';
 }
 
 use Carp qw/carp croak/;
 use Class::Load qw/try_load_class/;
-
-use Mo qw/default/;
+use Moo;
 
 has rng => (
 	is      => 'rw',
-	isa     => 'CodeRef',
+	isa     => sub { ref $_[0] eq 'CODE' },
 	default => sub { sub { int(rand($_[0])) } },
 	);
 
 has words => (
 	is      => 'rw',
-	isa     => 'Str',
+	isa     => sub { !ref $_[0] },
 	default => sub { 'EN' },
 	);
 
@@ -30,7 +29,7 @@ has words => (
 
 sub make_password
 {
-	my ($self, $length) = @_;
+	my ($self, $length, $filter) = @_;
 	
 	$self = $self->new unless ref $self;
 	
@@ -40,12 +39,16 @@ sub make_password
 	my $rng        = $self->rng;
 	my $words      = $self->_word_list;
 	my $word_count = @$words;
-	
-	return
-		join ' ',
-		map { $words->[$_] }
-		map { $rng->($word_count) }
-		1 .. $length;
+
+	my @password;
+	while (@password < $length)
+	{
+		local $_ = my $maybe = $words->[ $rng->($word_count) ];
+		push @password, $maybe
+			if (!defined $filter or $maybe ~~ $filter);
+	}
+
+	return join q{ }, @password;	
 }
 
 sub _word_list
@@ -129,13 +132,18 @@ generator.
 
 =over
 
-=item * C<< make_password($size) >>
+=item * C<< make_password($size, $filter) >>
 
 Returns the password as a string.
 
 $size is the length of the password in words. It defaults to 4. For the
 English dictionary that provides over 47 bits of entropy; for the Italian
 dictionary (which has twice as many words), about 56 bits of entropy.
+
+$filter is a test against which each word is checked. It can be a sub
+returning true if the word is OK, or a regular expression matching OK
+words. Words which are not OK will be excluded from passwords. The default
+is to allow any words found in the provided dictionary.
 
 For reference, 47 bits of entropy is roughly equivalent to an eight digit
 random case-sensitive alphanumeric password (i.e. 62^8).
@@ -148,8 +156,10 @@ the second line:
  say Crypt::XkcdPassword->make_password($size);
  say Crypt::XkcdPassword->new->make_password($size);
 
-Note that the passphrases returned may not be ASCII-safe, and may sometimes
-be inappropriate for uttering in polite company.
+Note that the passphrases returned may not be ASCII-safe, and may
+sometimes be inappropriate for uttering in polite company. See
+L<Crypt::XkcdPassword::Examples> for ways of using $filter to resolve
+this situation.
 
 =item * C<< chars >>
 
@@ -167,6 +177,8 @@ Please report any bugs to
 L<http://rt.cpan.org/Dist/Display.html?Queue=Crypt-XkcdPassword>.
 
 =head1 SEE ALSO
+
+L<Crypt::XkcdPassword::Examples> - how to do stuff with this module.
 
 L<Data::SimplePassword> - I borrowed this module's interface, so it
 should mostly be possible to s/Data::SimplePassword/Crypt::XkcdPassword/.

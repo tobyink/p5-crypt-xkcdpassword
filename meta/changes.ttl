@@ -15,3 +15,26 @@ dist:v_0-001
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/Crypt-XkcdPassword-0.001.tar.gz> ;
 	rdfs:label      "Initial release" .
 
+dist:project :release dist:v_0-002 .
+dist:v_0-002
+	a               :Version ;
+	dc:issued       "2012-02-03"^^xsd:date ;
+	:revision       "0.002"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/Crypt-XkcdPassword-0.002.tar.gz> ;
+	dcs:changeset [
+		dcs:versus dist:v_0-001;
+		dcs:item   [rdfs:label "Forgot to run mo-inline in 0.001, creating an undeclared dependency on Mo. Have switched to Moo now anyway, and declared that as a dependency."@en;a dcs:Bugfix,dcs:Packaging];
+		].
+
+dist:project :release dist:v_0-003 .
+dist:v_0-003
+	a               :Version ;
+	dc:issued       "2012-03-06"^^xsd:date ;
+	:revision       "0.003"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/Crypt-XkcdPassword-0.003.tar.gz> ;
+	dcs:changeset [
+		dcs:versus dist:v_0-002;
+		dcs:item   [rdfs:label "Provide a $filter parameter to make_password."@en; a dcs:Addition; dcs:fixes <http://purl.org/NET/cpan-uri/rt/ticket/74684>, <http://purl.org/NET/cpan-uri/rt/ticket/74685> ];
+		dcs:item   [rdfs:label "Crypt::XkcdPassword::Examples"@en; a dcs:Addition, dcs:Documentation ] ;
+		dcs:item   [rdfs:label "Require Perl 5.10.1 (Unicode in 5.10.0 is too broken)."@en; a dcs:Packaging ]
+		].
