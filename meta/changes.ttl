@@ -24,7 +24,7 @@ dist:v_0-002
 	dcs:changeset [
 		dcs:versus dist:v_0-001;
 		dcs:item   [rdfs:label "Forgot to run mo-inline in 0.001, creating an undeclared dependency on Mo. Have switched to Moo now anyway, and declared that as a dependency."@en;a dcs:Bugfix,dcs:Packaging];
-		].
+	].
 
 dist:project :release dist:v_0-003 .
 dist:v_0-003
@@ -37,4 +37,15 @@ dist:v_0-003
 		dcs:item   [rdfs:label "Provide a $filter parameter to make_password."@en; a dcs:Addition; dcs:fixes <http://purl.org/NET/cpan-uri/rt/ticket/74684>, <http://purl.org/NET/cpan-uri/rt/ticket/74685> ];
 		dcs:item   [rdfs:label "Crypt::XkcdPassword::Examples"@en; a dcs:Addition, dcs:Documentation ] ;
 		dcs:item   [rdfs:label "Require Perl 5.10.1 (Unicode in 5.10.0 is too broken)."@en; a dcs:Packaging ]
-		].
+	].
+
+dist:project :release dist:v_0-004 .
+dist:v_0-004
+	a               :Version ;
+	dc:issued       "2012-07-06"^^xsd:date ;
+	:revision       "0.004"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/Crypt-XkcdPassword-0.004.tar.gz> ;
+	dcs:changeset [
+		dcs:versus dist:v_0-003;
+		dcs:item   [ rdfs:label "EN::Roget word list."@en; a dcs:Addition ]
+	].

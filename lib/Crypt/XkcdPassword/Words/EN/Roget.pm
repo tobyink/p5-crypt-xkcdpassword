@@ -2,21 +2,19 @@ package Crypt::XkcdPassword::Words::EN::Roget;
 use 5.010001;
 BEGIN {
 	$Crypt::XkcdPassword::Words::EN::Roget::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.003';
+	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.004';
 }
-my @words;
 sub words
 {
-	unless (@words)
-	{
-		while (<DATA>)
-		{
+	state $words = do {
+		my @w;
+		while (<DATA>) {
 			chomp;
-			push @words, $_ if length;
+			push @w, $_ if length;
 		}
-	}
-	
-	\@words
+		\@w;
+	};
+	$words;
 }
 __PACKAGE__
 __DATA__

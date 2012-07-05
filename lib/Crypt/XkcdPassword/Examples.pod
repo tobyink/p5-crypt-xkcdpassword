@@ -39,6 +39,13 @@ A solution is to filter words through a spell checker.
  
  say Crypt::XkcdPassword->make_password(4, $filter);
 
+=head2 Use EN::Roget
+
+An alternative English dictionary is provided which filters the standard
+English dictionary through Roget's thesaurus.
+
+ my $gen = Crypt::XkcdPassword->new(words => 'EN::Roget');
+
 =head1 COMBINING BOTH
 
 The following filter combines both of the above, and also filters out

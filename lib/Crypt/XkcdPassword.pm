@@ -6,7 +6,7 @@ use utf8;
 
 BEGIN {
 	$Crypt::XkcdPassword::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::VERSION   = '0.003';
+	$Crypt::XkcdPassword::VERSION   = '0.004';
 }
 
 use Carp qw/carp croak/;
@@ -17,13 +17,13 @@ has rng => (
 	is      => 'rw',
 	isa     => sub { ref $_[0] eq 'CODE' },
 	default => sub { sub { int(rand($_[0])) } },
-	);
+);
 
 has words => (
 	is      => 'rw',
 	isa     => sub { !ref $_[0] },
 	default => sub { 'EN' },
-	);
+);
 
 *chars = *provider = sub {};
 
@@ -97,8 +97,8 @@ many passwords as you like.
 
 =head2 Attributes
 
-This module doesn't use Moose, but uses its "mini-me", L<Mo>. Like Moose,
-Mo provides the concept of attributes, which have a getter/setter method.
+This module doesn't use Moose, but uses its "mini-me", L<Moo>. Like Moose,
+Moo provides the concept of attributes, which have a getter/setter method.
 
 =over
 
@@ -111,6 +111,11 @@ C<< Crypt::XkcdPassword::Words::EN >>.
 
 C<< Crypt::XkcdPassword::Words::EN >> is a list of 10,000 common English
 words.
+
+C<< Crypt::XkcdPassword::Words::EN::Roget >> is a list of about 8500
+words. The words are less questionable, but as there are fewer of them,
+pass phrases will be chosen from a smaller pool, thus slightly more
+guessable.
 
 Also supplied is "IT", a list of 20,000 common Italian words.
 
