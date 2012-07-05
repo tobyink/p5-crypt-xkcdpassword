@@ -1,7 +1,6 @@
 package Crypt::XkcdPassword;
 
 use 5.010001;
-use Object::AUTHORITY;
 use utf8;
 
 BEGIN {
@@ -11,18 +10,20 @@ BEGIN {
 
 use Carp qw/carp croak/;
 use Class::Load qw/try_load_class/;
-use Moo;
+
+use Any::Moose;
+use Object::AUTHORITY;
 
 has rng => (
 	is      => 'rw',
-	isa     => sub { ref $_[0] eq 'CODE' },
+	isa     => 'CodeRef',
 	default => sub { sub { int(rand($_[0])) } },
 );
 
 has words => (
 	is      => 'rw',
-	isa     => sub { !ref $_[0] },
-	default => sub { 'EN' },
+	isa     => 'Str',
+	default => 'EN',
 );
 
 *chars = *provider = sub {};
@@ -97,8 +98,7 @@ many passwords as you like.
 
 =head2 Attributes
 
-This module doesn't use Moose, but uses its "mini-me", L<Moo>. Like Moose,
-Moo provides the concept of attributes, which have a getter/setter method.
+This is a Moose (well, L<Any::Moose>) based class.
 
 =over
 
