@@ -4,26 +4,28 @@ use 5.010001;
 use utf8;
 
 BEGIN {
-	$Crypt::XkcdPassword::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::VERSION   = '0.004';
+	$Crypt::XkcdPassword::AUTHORITY = "cpan:TOBYINK";
+	$Crypt::XkcdPassword::VERSION   = "0.004";
 }
 
-use Carp qw/carp croak/;
-use Class::Load qw/try_load_class/;
+use match::simple   qw( M );
+use Carp            qw( carp croak );
+use Module::Runtime qw( require_module );
+use Types::Standard qw( CodeRef Str );
 
-use Any::Moose;
-use Object::AUTHORITY;
+use Moo;
+with qw(Role::Commons::Authority);
 
 has rng => (
-	is      => 'rw',
-	isa     => 'CodeRef',
+	is      => "rw",
+	isa     => CodeRef,
 	default => sub { sub { int(rand($_[0])) } },
 );
 
 has words => (
-	is      => 'rw',
-	isa     => 'Str',
-	default => 'EN',
+	is      => "rw",
+	isa     => Str,
+	default => sub { "EN" },
 );
 
 *chars = *provider = sub {};
@@ -46,7 +48,7 @@ sub make_password
 	{
 		local $_ = my $maybe = $words->[ $rng->($word_count) ];
 		push @password, $maybe
-			if (!defined $filter or $maybe ~~ $filter);
+			if (!defined $filter or $maybe |M| $filter);
 	}
 
 	return join q{ }, @password;	
@@ -55,14 +57,14 @@ sub make_password
 sub _word_list
 {
 	my ($self) = @_;
-	my $class = sprintf 'Crypt::XkcdPassword::Words::%s', $self->words;
-	try_load_class($class)
-		or do {
-			carp "$class could not be loaded, switching to 'EN'";
-			croak "No point switching!" if $self->words eq 'EN';
-			$self->words('EN');
-			return $self->_word_list;
-		};
+	my $class = sprintf "Crypt::XkcdPassword::Words::%s", $self->words;
+	
+	eval { require_module($class) } or do {
+		carp "$class could not be loaded, switching to 'EN'";
+		croak "No point switching!" if $self->words eq "EN";
+		$self->words("EN");
+		return $self->_word_list;
+	};
 	
 	return $class->words;
 }
