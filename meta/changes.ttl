@@ -50,3 +50,14 @@ dist:v_0-004
 		dcs:item   [ rdfs:label "EN::Roget word list."@en; a dcs:Addition ];
 		dcs:item   [ rdfs:label "Switch from Moo to Any::Moose."@en ]
 	].
+
+dist:project :release dist:v_0-005 .
+dist:v_0-005
+	a               :Version ;
+	dc:issued       "2013-05-21"^^xsd:date ;
+	:revision       "0.005"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/Crypt-XkcdPassword-0.005.tar.gz> ;
+	dcs:changeset [
+		dcs:versus dist:v_0-004;
+		dcs:item   [ rdfs:label "Any::Moose -> Moo + Types::Standard; smartmatch -> match::smart; Class::Load -> Module::Runtime."@en ];
+	].
