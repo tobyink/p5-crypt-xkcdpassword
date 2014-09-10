@@ -2,7 +2,7 @@ package Crypt::XkcdPassword::Words::EN::Roget;
 use 5.010001;
 BEGIN {
 	$Crypt::XkcdPassword::Words::EN::Roget::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.005';
+	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.006';
 }
 sub words
 {

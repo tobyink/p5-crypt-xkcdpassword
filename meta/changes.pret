@@ -61,3 +61,10 @@ dist:v_0-005
 		dcs:versus dist:v_0-004;
 		dcs:item   [ rdfs:label "Any::Moose -> Moo + Types::Standard; smartmatch -> match::smart; Class::Load -> Module::Runtime."@en ];
 	].
+
+`Crypt-XkcdPassword 0.006 cpan:TOBYINK`
+	issued    2014-09-10;
+	changeset [
+		item "Switch to Dist::Inkt."^^Packaging;
+	].
+
