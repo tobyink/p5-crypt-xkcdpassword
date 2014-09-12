@@ -1,20 +1,21 @@
-package Crypt::XkcdPassword;
-
-use 5.010001;
+use 5.008;
+use strict;
+use warnings;
 use utf8;
+
+package Crypt::XkcdPassword;
 
 BEGIN {
 	$Crypt::XkcdPassword::AUTHORITY = "cpan:TOBYINK";
 	$Crypt::XkcdPassword::VERSION   = "0.006";
 }
 
-use match::simple   qw( M );
+use match::simple   qw( match );
 use Carp            qw( carp croak );
 use Module::Runtime qw( require_module );
 use Types::Standard qw( CodeRef Str );
 
 use Moo;
-with qw(Role::Commons::Authority);
 
 has rng => (
 	is      => "rw",
@@ -32,7 +33,8 @@ has words => (
 
 sub make_password
 {
-	my ($self, $length, $filter) = @_;
+	my $self = shift;
+	my ($length, $filter) = @_;
 	
 	$self = $self->new unless ref $self;
 	
@@ -48,17 +50,17 @@ sub make_password
 	{
 		local $_ = my $maybe = $words->[ $rng->($word_count) ];
 		push @password, $maybe
-			if (!defined $filter or $maybe |M| $filter);
+			if (!defined $filter or match($maybe, $filter));
 	}
 
-	return join q{ }, @password;	
+	join q{ }, @password;	
 }
 
 sub _word_list
 {
-	my ($self) = @_;
-	my $class = sprintf "Crypt::XkcdPassword::Words::%s", $self->words;
+	my $self = shift;
 	
+	my $class = sprintf "Crypt::XkcdPassword::Words::%s", $self->words;
 	eval { require_module($class) } or do {
 		carp "$class could not be loaded, switching to 'EN'";
 		croak "No point switching!" if $self->words eq "EN";
@@ -66,7 +68,7 @@ sub _word_list
 		return $self->_word_list;
 	};
 	
-	return $class->words;
+	$class->words;
 }
 
 __PACKAGE__
@@ -100,7 +102,7 @@ many passwords as you like.
 
 =head2 Attributes
 
-This is a Moose (well, L<Any::Moose>) based class.
+This is a Moo-based class.
 
 =over
 
@@ -200,7 +202,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2012 by Toby Inkster.
+This software is copyright (c) 2012, 2014 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

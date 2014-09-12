@@ -1,10 +1,10 @@
 @prefix deps:  <http://ontologi.es/doap-deps#> .
 
 <http://purl.org/NET/cpan-uri/dist/Crypt-XkcdPassword/project>
+	deps:runtime-requirement         [ deps:on "perl 5.008"^^deps:CpanId ];
 	deps:runtime-requirement         [ deps:on "match::simple"^^deps:CpanId ];
 	deps:runtime-requirement         [ deps:on "Module::Runtime"^^deps:CpanId ];
 	deps:runtime-requirement         [ deps:on "Moo"^^deps:CpanId ];
-	deps:runtime-requirement         [ deps:on "Role::Commons::Authority"^^deps:CpanId ];
 	deps:runtime-requirement         [ deps:on "Types::Standard"^^deps:CpanId ];
 	deps:test-requirement            [ deps:on "Test::More 0.96"^^deps:CpanId ].
 
