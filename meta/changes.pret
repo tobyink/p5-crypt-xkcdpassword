@@ -74,5 +74,6 @@ dist:v_0-005
 		item "General tidying."^^Change;
 		item "Support for Perl 5.8."^^Change;
 		item "Don't depend on Role::Commons."^^Change;
+		item "Bundle `passphrase` command-line tool."^^Addition;
 	].
 

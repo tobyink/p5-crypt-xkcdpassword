@@ -74,6 +74,10 @@ sub _word_list
 __PACKAGE__
 __END__
 
+=pod
+
+=encoding utf-8
+
 =head1 NAME
 
 Crypt::XkcdPassword - see http://xkcd.com/936/
@@ -212,4 +216,3 @@ the same terms as the Perl 5 programming language system itself.
 THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
 MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
