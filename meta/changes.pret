@@ -68,3 +68,11 @@ dist:v_0-005
 		item "Switch to Dist::Inkt."^^Packaging;
 	].
 
+`Crypt-XkcdPassword 0.007 cpan:TOBYINK`
+	issued    2014-09-10;
+	changeset [
+		item "General tidying."^^Change;
+		item "Support for Perl 5.8."^^Change;
+		item "Don't depend on Role::Commons."^^Change;
+	].
+
