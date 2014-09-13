@@ -1,22 +1,38 @@
+use 5.008;
+use strict;
+use warnings;
+use utf8;
+
 package Crypt::XkcdPassword::Words::EN;
+
 BEGIN {
 	$Crypt::XkcdPassword::Words::EN::AUTHORITY = 'cpan:TOBYINK';
 	$Crypt::XkcdPassword::Words::EN::VERSION   = '0.008';
 }
-my @words;
-sub words
+
+use Moo;
+with qw(Crypt::XkcdPassword::Words);
+
+sub description
 {
-	unless (@words)
+	"The 10,000 most commonly used words in English.";
+}
+
+my $tell;
+sub filehandle
+{
+	if (defined $tell)
 	{
-		while (<DATA>)
-		{
-			chomp;
-			push @words, $_ if length;
-		}
+		seek(DATA, $tell, 0);
+	}
+	else
+	{
+		$tell = tell(DATA);
 	}
 	
-	\@words
+	\*DATA;
 }
+
 __PACKAGE__
 __DATA__
 you
@@ -1912,7 +1928,6 @@ immediately
 appointment
 social
 nature
-ú
 deserves
 west
 blake
@@ -4847,7 +4862,7 @@ misunderstood
 kiddo
 healing
 franklin
-fiancée
+fiancee
 derek
 cascade
 capeside
@@ -5181,7 +5196,7 @@ latin
 jeremy
 guessed
 grace's
-fiancé
+fiance
 display
 dip
 brooke's
@@ -6358,7 +6373,6 @@ convict
 butler
 bold
 ballet
-ñ
 whatcha
 unlikely
 spiritual
@@ -9134,7 +9148,7 @@ commerce
 chinatown
 chemicals
 cassidy
-café
+cafe
 baltimore
 authentic
 arraignment
@@ -9940,7 +9954,7 @@ sweeping
 stepmother
 stating
 stale
-señor
+senor
 settles
 seating
 seaborn

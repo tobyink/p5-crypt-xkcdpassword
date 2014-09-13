@@ -10,12 +10,12 @@ BEGIN {
 	$Crypt::XkcdPassword::VERSION   = "0.008";
 }
 
-use match::simple   qw( match );
-use Carp            qw( carp croak );
-use Module::Runtime qw( require_module );
-use Types::Standard qw( CodeRef Str );
+use match::simple            qw( match );
+use Carp                     qw( carp croak );
+use Module::Runtime          qw( require_module );
+use Types::Standard 1.000000 qw( CodeRef Str ConsumerOf ArrayRef );
 
-use Moo;
+use Moo 1.006000;
 
 has rng => (
 	is      => "rw",
@@ -23,10 +23,17 @@ has rng => (
 	default => sub { sub { int(rand($_[0])) } },
 );
 
+my $wordrole = 'Crypt::XkcdPassword::Words';
+
 has words => (
 	is      => "rw",
-	isa     => Str,
+	isa     => ConsumerOf->of($wordrole)->plus_coercions(
+		Str,      sub { require_module("$wordrole\::$_")->new },
+		ArrayRef, sub { my ($c, @a) = @$_; require_module("$wordrole\::$c")->new(@a) },
+	),
+	coerce  => 1,
 	default => sub { "EN" },
+	handles => { _word_list => 'words' },
 );
 
 *chars = *provider = sub {};
@@ -54,21 +61,6 @@ sub make_password
 	}
 
 	join q{ }, @password;	
-}
-
-sub _word_list
-{
-	my $self = shift;
-	
-	my $class = sprintf "Crypt::XkcdPassword::Words::%s", $self->words;
-	eval { require_module($class) } or do {
-		carp "$class could not be loaded, switching to 'EN'";
-		croak "No point switching!" if $self->words eq "EN";
-		$self->words("EN");
-		return $self->_word_list;
-	};
-	
-	$class->words;
 }
 
 __PACKAGE__
@@ -112,20 +104,18 @@ This is a Moo-based class.
 
 =item * C<< words >>
 
-A string which will be appended to C<< Crypt::XkcdPassword::Words:: >>
-to form a class name which will be used as a source for words. The default
-is "EN", which means the class used as a source for words is
-C<< Crypt::XkcdPassword::Words::EN >>.
+An object consuming the L<Crypt::XkcdPassword::Words> role.
 
-C<< Crypt::XkcdPassword::Words::EN >> is a list of 10,000 common English
-words.
+Can be coerced from a short string. This will be prepended with
+C<< Crypt::XkcdPassword::Words:: >> to form a class name, and the
+C<< new >> constructor will be called.
 
-C<< Crypt::XkcdPassword::Words::EN::Roget >> is a list of about 8500
-words. The words are less questionable, but as there are fewer of them,
-pass phrases will be chosen from a smaller pool, thus slightly more
-guessable.
+Can also coerce from an arrayref where the first item in the array is a
+short string used as above, and the other items in the array are passed
+to the constructor.
 
-Also supplied is "IT", a list of 20,000 common Italian words.
+The default is "EN", which means the class used as a source for words
+is C<< Crypt::XkcdPassword::Words::EN >>.
 
 =item * C<< rng >>
 
@@ -183,6 +173,23 @@ No-op, provided for compatibility with Data::SimplePassword.
 No-op, provided for compatibility with Data::SimplePassword.
 
 =back
+
+=head2 Bundled Word Lists
+
+C<< Crypt::XkcdPassword::Words::EN >> is a list of 10,000 common
+English words.
+
+C<< Crypt::XkcdPassword::Words::EN::Roget >> is a list of about 8500
+words. The words are less questionable, but as there are fewer of them,
+pass phrases will be chosen from a smaller pool, thus slightly more
+guessable.
+
+C<< Crypt::XkcdPassword::Words::IT >> is a list of 20,000 common
+Italian words.
+
+C<< Crypt::XkcdPassword::Words::sys >> uses your system's word list
+(C<< /usr/share/dict/words >> by default). The constructor can be
+passed an alternative filename.
 
 =head1 BUGS
 

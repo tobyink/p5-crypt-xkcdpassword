@@ -1,22 +1,38 @@
+use 5.008;
+use strict;
+use warnings;
+use utf8;
+
 package Crypt::XkcdPassword::Words::IT;
+
 BEGIN {
 	$Crypt::XkcdPassword::Words::IT::AUTHORITY = 'cpan:TOBYINK';
 	$Crypt::XkcdPassword::Words::IT::VERSION   = '0.008';
 }
-my @words;
-sub words
+
+use Moo;
+with qw(Crypt::XkcdPassword::Words);
+
+sub description
 {
-	unless (@words)
+	"The 20,000 most commonly used words in Italian.";
+}
+
+my $tell;
+sub filehandle
+{
+	if (defined $tell)
 	{
-		while (<DATA>)
-		{
-			chomp;
-			push @words, $_ if length;
-		}
+		seek(DATA, $tell, 0);
+	}
+	else
+	{
+		$tell = tell(DATA);
 	}
 	
-	\@words
+	\*DATA;
 }
+
 __PACKAGE__
 __DATA__
 non

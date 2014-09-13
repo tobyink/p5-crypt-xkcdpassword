@@ -10,13 +10,19 @@ use Getopt::Long;
 
 my $words  = "EN";
 my $length = 4;
+my $count  = 1;
 
 GetOptions(
 	'words|w=s'     => \$words,
 	'length|l=i'    => \$length,
+	'count|n=i'     => \$count,
 );
 
-print Crypt::XkcdPassword->new(words => $words)->make_password($length), $/;
+$words = [ split /,/, $words ]
+	if $words =~ /,/;
+
+my $gen = Crypt::XkcdPassword->new(words => $words);
+print $gen->make_password($length), $/ for 1 .. $count;
 
 __END__
 
@@ -50,7 +56,17 @@ The Perl class that will be used as a dictionary. Whatever string you
 specify will be prefixed with C<< Crypt::XkcdPassword::Words:: >>.
 Case-sensitive.
 
+If this string contains a comma, it will be split into arguments which
+will be passed to the class' constructor. Currently C<< sys >> is the
+only class where this is useful.
+
 Defaults to C<< EN >>.
+
+=item C<< -n N >>, C<< --count=N >>
+
+The number of passphrases to generate.
+
+Defaults to 1.
 
 =back
 
