@@ -7,7 +7,7 @@ package Crypt::XkcdPassword;
 
 BEGIN {
 	$Crypt::XkcdPassword::AUTHORITY = "cpan:TOBYINK";
-	$Crypt::XkcdPassword::VERSION   = "0.007";
+	$Crypt::XkcdPassword::VERSION   = "0.008";
 }
 
 use match::simple   qw( match );

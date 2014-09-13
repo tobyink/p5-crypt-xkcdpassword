@@ -77,3 +77,9 @@ dist:v_0-005
 		item "Bundle `passphrase` command-line tool."^^Addition;
 	].
 
+`Crypt-XkcdPassword 0.008 cpan:TOBYINK`
+	issued    2014-09-13;
+	changeset [
+		item "Fix issue tracker metadata so that 'NOBODY' doesn't show up in CREDITS file for reporting some bugs."^^Packaging;
+	].
+
