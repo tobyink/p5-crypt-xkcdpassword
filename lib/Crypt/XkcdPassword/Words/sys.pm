@@ -7,7 +7,7 @@ package Crypt::XkcdPassword::Words::sys;
 
 BEGIN {
 	$Crypt::XkcdPassword::Words::sys::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::Words::sys::VERSION   = '0.008';
+	$Crypt::XkcdPassword::Words::sys::VERSION   = '0.009';
 }
 
 use File::Spec;

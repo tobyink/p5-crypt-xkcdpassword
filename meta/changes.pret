@@ -83,3 +83,25 @@ dist:v_0-005
 		item "Fix issue tracker metadata so that 'NOBODY' doesn't show up in CREDITS file for reporting some bugs."^^Packaging;
 	].
 
+`Crypt-XkcdPassword 0.009 cpan:TOBYINK`
+	issued    2014-09-13;
+	changeset [
+		item [
+			a dcs:Addition;
+			label "Crypt::XkcdPassword::Words::sys";
+			dcs:thanks cpan:MSTROUT;
+		];
+		item [
+			a dcs:Change;
+			label "A bunch of refactoring common stuff into Crypt::XkcdPassword::Words, which is a role that must now be consumed by word list classes.";
+		];
+		item [
+			a dcs:Change;
+			label "The `words` attribute is now a blessed object, not a class name.";
+		];
+		item [
+			a dcs:Change;
+			label "The `passphrase` tool can now generate more than one phrase per invocation.";
+		];
+	].
+

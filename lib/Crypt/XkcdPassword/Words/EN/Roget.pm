@@ -7,7 +7,7 @@ package Crypt::XkcdPassword::Words::EN::Roget;
 
 BEGIN {
 	$Crypt::XkcdPassword::Words::EN::Roget::AUTHORITY = 'cpan:TOBYINK';
-	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.008';
+	$Crypt::XkcdPassword::Words::EN::Roget::VERSION   = '0.009';
 }
 
 use Moo;
