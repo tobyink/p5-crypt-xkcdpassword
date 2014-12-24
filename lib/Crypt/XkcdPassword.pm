@@ -12,7 +12,7 @@ BEGIN {
 
 use match::simple            qw( match );
 use Carp                     qw( carp croak );
-use Module::Runtime          qw( require_module );
+use Module::Runtime          qw( use_module );
 use Types::Standard 1.000000 qw( CodeRef Str ConsumerOf ArrayRef );
 
 use Moo 1.006000;
@@ -28,8 +28,8 @@ my $wordrole = 'Crypt::XkcdPassword::Words';
 has words => (
 	is      => "rw",
 	isa     => ConsumerOf->of($wordrole)->plus_coercions(
-		Str,      sub { require_module("$wordrole\::$_")->new },
-		ArrayRef, sub { my ($c, @a) = @$_; require_module("$wordrole\::$c")->new(@a) },
+		Str,      sub { use_module("$wordrole\::$_")->new },
+		ArrayRef, sub { my ($c, @a) = @$_; use_module("$wordrole\::$c")->new(@a) },
 	),
 	coerce  => 1,
 	default => sub { "EN" },
