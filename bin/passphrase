@@ -6,22 +6,54 @@ use warnings;
 use utf8;
 
 use Crypt::XkcdPassword;
+use Crypt::Random ();
 use Getopt::Long;
 
 my $words  = "EN";
 my $length = 4;
 my $count  = 1;
+my $strong_rng = 1;
+my $stronger_rng = 0;
 
 GetOptions(
 	'words|w=s'     => \$words,
 	'length|l=i'    => \$length,
 	'count|n=i'     => \$count,
+    'strong'        => \$strong_rng,
+    'stronger'      => \$stronger_rng,
 );
 
 $words = [ split /,/, $words ]
 	if $words =~ /,/;
 
-my $gen = Crypt::XkcdPassword->new(words => $words);
+my %args = (
+    words => $words,
+);
+
+if( $stronger_rng ) {
+    $args{rng} = sub {
+        my $max_value = shift;
+        my $rng = Crypt::Random::makerandom(
+            Size => 2048,
+            Strength => 1,
+        );
+        my $val = $rng % $max_value;
+        return $val;
+    };
+}
+elsif( $strong_rng ) {
+    $args{rng} = sub {
+        my $max_value = shift;
+        my $rng = Crypt::Random::makerandom(
+            Size => 2048,
+            Strength => 0,
+        );
+        my $val = $rng % $max_value;
+        return $val;
+    };
+}
+
+my $gen = Crypt::XkcdPassword->new( %args );
 print $gen->make_password($length), $/ for 1 .. $count;
 
 __END__
@@ -67,6 +99,18 @@ Defaults to C<< EN >>.
 The number of passphrases to generate.
 
 Defaults to 1.
+
+=item C<< --strong >>
+
+Use a cryptographic PRNG, equivilent to C</dev/urandom>.
+
+Defaults to true.
+
+=item C<< --stronger >>
+
+Use a cryptographic RNG, equivilent to C</dev/random>.
+
+Defaults to false.
 
 =back
 
