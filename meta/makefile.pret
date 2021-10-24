@@ -2,6 +2,7 @@
 
 <http://purl.org/NET/cpan-uri/dist/Crypt-XkcdPassword/project>
 	:runtime-requirement  [ :on "perl 5.008"^^:CpanId ];
+	:runtime-requirement  [ :on "Crypt::Random 1.54"^^:CpanId ];
 	:runtime-requirement  [ :on "match::simple"^^:CpanId ];
 	:runtime-requirement  [ :on "Module::Runtime"^^:CpanId ];
 	:runtime-requirement  [ :on "Moo 1.006000"^^:CpanId ];
